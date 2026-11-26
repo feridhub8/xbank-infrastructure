@@ -1,0 +1,100 @@
+{
+  "realm": "xbankDev",
+  "enabled": true,
+  "registrationAllowed": false,
+  "registrationEmailAsUsername": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "passwordPolicy": "length(8) and upperCase(1) and lowerCase(1) and digits(1)",
+  "roles": {
+    "realm": [
+      {
+        "name": "USER",
+        "description": "Default role for every registered user"
+      },
+      {
+        "name": "ADMIN",
+        "description": "Granted by hand in the admin console"
+      },
+      {
+        "name": "offline_access",
+        "description": "${role_offline-access}"
+      },
+      {
+        "name": "uma_authorization",
+        "description": "${role_uma_authorization}"
+      },
+      {
+        "name": "default-roles-xbankdev",
+        "description": "${role_default-roles}",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "offline_access",
+            "uma_authorization",
+            "USER"
+          ]
+        }
+      }
+    ]
+  },
+  "defaultRole": {
+    "name": "default-roles-xbankdev",
+    "composite": true
+  },
+  "clients": [
+    {
+      "clientId": "xbank-ms-auth",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email",
+        "kc-admin-api"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "organization",
+        "microprofile-jwt"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "service-account-xbank-ms-auth",
+      "enabled": true,
+      "serviceAccountClientId": "xbank-ms-auth",
+      "clientRoles": {
+        "realm-management": [
+          "manage-users",
+          "view-users",
+          "query-users"
+        ]
+      }
+    }
+  ],
+  "components": {
+    "org.keycloak.userprofile.UserProfileProvider": [
+      {
+        "providerId": "declarative-user-profile",
+        "config": {
+          "kc.user.profile.config": [
+            "{\"attributes\": [{\"name\": \"username\", \"displayName\": \"${username}\", \"multivalued\": false, \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"validations\": {\"length\": {\"min\": 3, \"max\": 255}, \"username-prohibited-characters\": {}, \"up-username-not-idn-homograph\": {}}}, {\"name\": \"email\", \"displayName\": \"${email}\", \"multivalued\": false, \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"required\": {\"roles\": [\"user\"]}, \"validations\": {\"email\": {}, \"length\": {\"max\": 255}}}, {\"name\": \"firstName\", \"displayName\": \"${firstName}\", \"multivalued\": false, \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"required\": {\"roles\": [\"user\"]}, \"validations\": {\"length\": {\"max\": 255}, \"person-name-prohibited-characters\": {}}}, {\"name\": \"lastName\", \"displayName\": \"${lastName}\", \"multivalued\": false, \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"required\": {\"roles\": [\"user\"]}, \"validations\": {\"length\": {\"max\": 255}, \"person-name-prohibited-characters\": {}}}, {\"name\": \"phoneNumber\", \"displayName\": \"Phone number\", \"multivalued\": false, \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\"]}, \"validations\": {\"pattern\": {\"pattern\": \"^\\\\+994[0-9]{9}$\", \"error-message\": \"Phone must be +994 followed by 9 digits\"}}}, {\"name\": \"fin\", \"displayName\": \"FIN\", \"multivalued\": false, \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\"]}, \"validations\": {\"pattern\": {\"pattern\": \"^[A-Z0-9]{7}$\", \"error-message\": \"FIN must be 7 uppercase letters or digits\"}}}], \"groups\": [{\"name\": \"user-metadata\", \"displayHeader\": \"User metadata\"}]}"
+          ]
+        }
+      }
+    ]
+  }
+}

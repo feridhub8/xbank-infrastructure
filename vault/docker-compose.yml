@@ -1,0 +1,24 @@
+name: xbank
+
+services:
+  vault:
+    image: hashicorp/vault:1.21.4
+    command: ["server"]
+    env_file: .env
+    environment:
+      VAULT_ADDR: http://127.0.0.1:8200
+    ports:
+      - "${VAULT_PORT:-8200}:8200"
+    volumes:
+      - ./config:/vault/config:ro
+      - vault-data:/vault/file
+    restart: unless-stopped
+    networks:
+      - xbank_network
+
+volumes:
+  vault-data:
+
+networks:
+  xbank_network:
+    external: true
