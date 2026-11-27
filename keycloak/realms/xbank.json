@@ -2,7 +2,7 @@
   "realm": "xbank",
   "enabled": true,
   "registrationAllowed": false,
-  "registrationEmailAsUsername": true,
+  "registrationEmailAsUsername": false,
   "loginWithEmailAllowed": true,
   "duplicateEmailsAllowed": false,
   "passwordPolicy": "length(8) and upperCase(1) and lowerCase(1) and digits(1)",

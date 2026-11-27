@@ -1,0 +1,22 @@
+name: xbank
+
+# Tests for this repo's setup. They run against the running infrastructure:
+#   docker compose -f tests/docker-compose.yml run --rm --build tests
+services:
+  tests:
+    build: .
+    image: xbank-infrastructure-tests:local
+    env_file:
+      - ../keycloak/.env
+      - ../vault/.env
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      VAULT_ADDR: http://vault:8200
+    volumes:
+      - ../vault/setup:/vault/setup:ro
+    networks:
+      - xbank_network
+
+networks:
+  xbank_network:
+    external: true
